@@ -1,10 +1,10 @@
 {
   "mappings": [
-    "/content/aem-boilerplate/:/",
-    "/content/aem-boilerplate/configuration:/.helix/config.json",
-    "/content/aem-boilerplate/metadata:/metadata.json"
+    "/content/Gazal-ue-site/:/",
+    "/content/Gazal-ue-site/configuration:/.helix/config.json",
+    "/content/Gazal-ue-site/metadata:/metadata.json"
   ],
   "includes": [
-    "/content/aem-boilerplate/"
+    "/content/Gazal-ue-site/"
   ]
 }
