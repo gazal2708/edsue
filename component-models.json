@@ -222,7 +222,7 @@
         "component": "custom-asset-namespace:custom-asset",
         "name": "image",
         "label": "Image",
-        "configUrl": "https://raw.githubusercontent.com/gazal2708/edsue/refs/heads/main/tools/asset-selector/image.config.json",
+        "configUrl": "/content/dam/Gazal-ue-site/config.json",
         "valueType": "string"
       },
       {
