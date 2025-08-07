@@ -43,14 +43,14 @@ function decorateAemUrlUtil(aemUrl) {
       // Get the assetname parameter
       const assetName = url.searchParams.get('assetname');
       if (!assetName) {
-          console.error('No assetname parameter found in URL:', aemUrl);
+          // console.error('No assetname parameter found in URL:', aemUrl);
           return aemUrl; // Return original URL if no assetname found
       }
       // Construct the new assets.ups.com URL
       const convertedUrl = `https://assets.ups.com/dam/assets/${assetName}`;
       return convertedUrl;
   } catch (error) {
-      console.error('Error converting AEM URL:', error);
+      // console.error('Error converting AEM URL:', error);
       return aemUrl; // Return original URL on error
   }
 }
