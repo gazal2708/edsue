@@ -31,11 +31,15 @@ export function moveAttributes(from, to, attributes) {
   });
 }
 
+function isDMOpenAPIUrl(src) {
+  return /^(https?:\/\/(.*)\/adobe\/assets\/urn:aaid:aem:(.*))/gm.test(src);
+}
+
 // Standalone definition of convertAemUrlToAssetsUrl for testing
 function decorateAemUrlUtil(aemUrl) {
   try {
     // Only convert if the URL starts with the required prefix
-    if (!aemUrl.startsWith('https://delivery-p')) {
+    if (!isDMOpenAPIUrl(aemUrl)) {
       return aemUrl;
     }
     // Parse the URL to extract query parameters
@@ -52,26 +56,8 @@ function decorateAemUrlUtil(aemUrl) {
   }
 }
 
-// const testUrls = [
-//   // Should convert
-//   'https://delivery-p12345.adobeaemcloud.com/path/to/asset?assetname=myimage.jpg',
-//   'https://delivery-p67890.adobeaemcloud.com/another/path?assetname=sample.pdf',
-//   'https://delivery-p129624-e1269699.adobeaemcloud.com/adobe/assets/urn:aaid:aem:57fd1397-1dcf-43e0-945d-056ce8d79159/renditions/original/as/LicenseTnC.pdf?assetname=LicenseTnC.pdf',
-//   'https://delivery-p66302-e574366.adobeaemcloud.com/adobe/assets/urn:aaid:aem:bab896a1-3210-4674-85e7-ce224b9f9a25/as/sparkles.avif?assetname=sparkles.gif',
-//   // Should NOT convert
-//   'https://some-other-domain.com/path?assetname=shouldnotconvert.jpg',
-//   'https://delivery-p12345.adobeaemcloud.com/path/to/asset', // no assetname param
-//   'https://delivery-p12345.adobeaemcloud.com/path/to/asset?notassetname=foo',
-// ];
-// testUrls.forEach((url) => {
-//   const result = convertAemUrlToAssetsUrl(url);
-//   console.log(`Input:    ${url}`);
-//   console.log(`Output:   ${result}`);
-//   console.log('---');
-// });
-
 export function decorateExternalImages(main) {
-  main.querySelectorAll('a[href^="https://delivery-p"]:not([href*="/original/"]), a[href^="https://delivery-p"][href$=".gif"], a[href*="assets.ups.com"]:not([href*="/original/"])').forEach((a) => {
+  main.querySelectorAll('a[href^="https://delivery-p"]:not([href*="/original/"]), a[href*="assets.ups.com"]:not([href*="/original/"]), a[href^="https://delivery-p"][href$=".gif"], a[href*="assets.ups.com"][href$=".gif"]').forEach((a) => {
     const url = new URL(decorateAemUrlUtil(a.href));
     if (url.hostname.endsWith('.adobeaemcloud.com') || url.hostname.includes('assets.ups.com')) {
       const pic = document.createElement('picture');
