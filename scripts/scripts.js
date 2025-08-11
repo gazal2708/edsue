@@ -31,11 +31,15 @@ export function moveAttributes(from, to, attributes) {
   });
 }
 
+function isDMOpenAPIUrl(src) {
+  return /^(https?:\/\/(.*)\/adobe\/assets\/urn:aaid:aem:(.*))/gm.test(src);
+}
+
 // Standalone definition of convertAemUrlToAssetsUrl for testing
 function decorateAemUrlUtil(aemUrl) {
   try {
     // Only convert if the URL starts with the required prefix
-    if (!aemUrl.startsWith('https://delivery-p')) {
+    if (!isDMOpenAPIUrl(aemUrl)) {
       return aemUrl;
     }
     // Parse the URL to extract query parameters
