@@ -14,24 +14,6 @@
         {
           "fields": [
             {
-              "defaultValue": ["image/*"],
-              "element": "checkbox",
-              "name": "type",
-              "options": [
-                {
-                  "label": "Image",
-                  "readOnly": true,
-                  "value": "image/*"
-                }
-              ]
-            }
-          ],
-          "groupKey": "FileTypeGroup",
-          "header": "File Type"
-        },
-        {
-          "fields": [
-            {
               "columns": 3,
               "defaultValue": ["arena"],
               "element": "taggroup",
