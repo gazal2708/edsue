@@ -35,76 +35,47 @@ function isDMOpenAPIUrl(src) {
   return /^(https?:\/\/(.*)\/adobe\/assets\/urn:aaid:aem:(.*))/gm.test(src);
 }
 
-// Standalone definition of convertAemUrlToAssetsUrl for testing
-function decorateAemUrlUtil(aemUrl) {
-  try {
-    // Only convert if the URL starts with the required prefix
-    if (!isDMOpenAPIUrl(aemUrl)) {
-      return aemUrl;
-    }
-    // Parse the URL to extract query parameters
-    const url = new URL(aemUrl);
-    // Get the assetname parameter
-    const assetName = url.searchParams.get('assetname');
-    if (!assetName) {
-      return aemUrl; // Return original URL if no assetname found
-    }
-    const convertedUrl = `https://assets.ups.com/dam/assets/${assetName}`;
-    return convertedUrl;
-  } catch (error) {
-    return aemUrl; // Return original URL on error
-  }
-}
-
-// const testUrls = [
-//   // Should convert
-//   'https://delivery-p12345.adobeaemcloud.com/path/to/asset?assetname=myimage.jpg',
-//   'https://delivery-p67890.adobeaemcloud.com/another/path?assetname=sample.pdf',
-//   'https://delivery-p129624-e1269699.adobeaemcloud.com/adobe/assets/urn:aaid:aem:57fd1397-1dcf-43e0-945d-056ce8d79159/renditions/original/as/LicenseTnC.pdf?assetname=LicenseTnC.pdf',
-//   'https://delivery-p66302-e574366.adobeaemcloud.com/adobe/assets/urn:aaid:aem:bab896a1-3210-4674-85e7-ce224b9f9a25/as/sparkles.avif?assetname=sparkles.gif',
-//   // Should NOT convert
-//   'https://some-other-domain.com/path?assetname=shouldnotconvert.jpg',
-//   'https://delivery-p12345.adobeaemcloud.com/path/to/asset', // no assetname param
-//   'https://delivery-p12345.adobeaemcloud.com/path/to/asset?notassetname=foo',
-// ];
-// testUrls.forEach((url) => {
-//   const result = convertAemUrlToAssetsUrl(url);
-//   console.log(`Input:    ${url}`);
-//   console.log(`Output:   ${result}`);
-//   console.log('---');
-// });
-
 export function decorateExternalImages(main) {
-  main.querySelectorAll('a[href^="https://delivery-p"]:not([href*="/original/"]), a[href^="https://delivery-p"][href$=".gif"], a[href*="assets.ups.com"]:not([href*="/original/"])').forEach((a) => {
-    const url = new URL(decorateAemUrlUtil(a.href));
-    if (url.hostname.endsWith('.adobeaemcloud.com') || url.hostname.includes('assets.ups.com')) {
-      const pic = document.createElement('picture');
+  main.querySelectorAll('a[href]').forEach((a) => {
+    // Check if it's a DM Open API URL
+    if (isDMOpenAPIUrl(a.href)) {
+      // Allow .gif files even if they contain /original/
+      const isGifFile = a.href.toLowerCase().endsWith('.gif');
+      const containsOriginal = a.href.includes('/original/');
 
-      const source1 = document.createElement('source');
-      source1.type = 'image/webp';
-      source1.srcset = url;
+      // Process if: not containing /original/ OR is a .gif file
+      if (!containsOriginal || isGifFile) {
+        const url = new URL(a.href);
+        if (url.hostname.endsWith('.adobeaemcloud.com') || url.hostname.includes('assets.ups.com')) {
+          const pic = document.createElement('picture');
 
-      const source2 = document.createElement('source');
-      source2.type = 'image/webp';
-      source2.srcset = url;
-      source2.media = '(min-width: 600px)';
+          const source1 = document.createElement('source');
+          source1.type = 'image/webp';
+          source1.srcset = url;
 
-      const source3 = document.createElement('source');
-      source3.type = 'image/jpg';
-      source3.media = '(min-width: 600px)';
-      source3.srcset = url;
+          const source2 = document.createElement('source');
+          source2.type = 'image/webp';
+          source2.srcset = url;
+          source2.media = '(min-width: 600px)';
 
-      const img = document.createElement('img');
-      img.loading = 'lazy';
-      img.src = url;
-      if (a.title) {
-        img.setAttribute('alt', a.title);
+          const source3 = document.createElement('source');
+          source3.type = 'image/jpg';
+          source3.media = '(min-width: 600px)';
+          source3.srcset = url;
+
+          const img = document.createElement('img');
+          img.loading = 'lazy';
+          img.src = url;
+          if (a.href !== a.innerText) {
+            img.setAttribute('alt', a.innerText);
+          }
+          pic.appendChild(source1);
+          pic.appendChild(source2);
+          pic.appendChild(source3);
+          pic.appendChild(img);
+          a.replaceWith(pic);
+        }
       }
-      pic.appendChild(source1);
-      pic.appendChild(source2);
-      pic.appendChild(source3);
-      pic.appendChild(img);
-      a.replaceWith(pic);
     }
   });
 }
