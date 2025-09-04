@@ -10,6 +10,7 @@
     "expiryOptions": {
         "allowSelectionAndDrag": false
     },
+    "assetDomainMapping": { "delivery-p66302-e574366.adobeaemcloud.com":"assets-quantas-test.com/"},
     "filterSchema": [
         {
           "fields": [
