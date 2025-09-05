@@ -193,6 +193,13 @@
     "id": "hero",
     "fields": [
       {
+        "component": "custom-asset-namespace:custom-asset",
+        "name": "image",
+        "label": "Image",
+        "configUrl": "/content/dam/Gazal-ue-site/config.json",
+        "valueType": "string"
+      },
+      {
         "component": "reference",
         "valueType": "string",
         "name": "image",
