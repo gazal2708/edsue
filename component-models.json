@@ -194,12 +194,6 @@
     "fields": [
       {
         "component": "reference",
-        "name": "image",
-        "label": "Image",
-        "multi": false
-      },
-      {
-        "component": "reference",
         "valueType": "string",
         "name": "image",
         "label": "Image",
