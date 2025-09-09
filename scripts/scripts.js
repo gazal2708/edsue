@@ -50,15 +50,6 @@ export function decorateExternalImages(main) {
       url1.searchParams.set('format', 'webply');
       source1.srcset = url1.toString();
 
-      // Source 2: WebP for desktop (2000px width)
-      const source2 = document.createElement('source');
-      source2.type = 'image/webp';
-      source2.media = '(min-width: 600px)';
-      const url2 = new URL(baseUrl);
-      url2.searchParams.set('width', '2000');
-      url2.searchParams.set('format', 'webply');
-      source2.srcset = url2.toString();
-
       // Source 3: JPEG for desktop (2000px width)
       const source3 = document.createElement('source');
       source3.type = 'image/jpeg';
@@ -67,6 +58,15 @@ export function decorateExternalImages(main) {
       url3.searchParams.set('width', '2000');
       url3.searchParams.set('format', 'jpg');
       source3.srcset = url3.toString();
+
+      // Source 2: WebP for desktop (2000px width)
+      const source2 = document.createElement('source');
+      source2.type = 'image/webp';
+      source2.media = '(min-width: 600px)';
+      const url2 = new URL(baseUrl);
+      url2.searchParams.set('width', '2000');
+      url2.searchParams.set('format', 'webply');
+      source2.srcset = url2.toString();
 
       // Fallback image: JPEG for mobile (750px width)
       const img = document.createElement('img');
