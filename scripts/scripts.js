@@ -118,6 +118,7 @@ export function decorateImagesWithWidthHeight(main) {
     main.querySelectorAll('img').forEach((img) => {
       const imgUrl = new URL(img.src);
       imgUrl.searchParams.set('width', '750');
+      img.src = imgUrl.toString();
       img.width = '1620';
       img.height = '1080';
     });
