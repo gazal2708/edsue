@@ -39,26 +39,42 @@ export function decorateExternalImages(main) {
   main.querySelectorAll('a[href]').forEach((a) => {
     // Check if it's a DM Open API URL
     if (isDMOpenAPIUrl(a.href)) {
-      const url = new URL(a.href);
+      const baseUrl = new URL(a.href);
       const pic = document.createElement('picture');
 
+      // Source 1: WebP for mobile (750px width)
       const source1 = document.createElement('source');
       source1.type = 'image/webp';
-      source1.srcset = url;
+      const url1 = new URL(baseUrl);
+      url1.searchParams.set('width', '750');
+      // url1.searchParams.set('format', 'webply');
+      source1.srcset = url1.toString();
 
+      // Source 2: WebP for desktop (2000px width)
       const source2 = document.createElement('source');
       source2.type = 'image/webp';
-      source2.srcset = url;
       source2.media = '(min-width: 600px)';
+      const url2 = new URL(baseUrl);
+      url2.searchParams.set('width', '2000');
+      // url2.searchParams.set('format', 'webply');
+      source2.srcset = url2.toString();
 
+      // Source 3: JPEG for desktop (2000px width)
       const source3 = document.createElement('source');
       source3.type = 'image/jpg';
       source3.media = '(min-width: 600px)';
-      source3.srcset = url;
+      const url3 = new URL(baseUrl);
+      url3.searchParams.set('width', '2000');
+      // url3.searchParams.set('format', 'jpg');
+      source3.srcset = url3.toString();
 
+      // Fallback image: JPEG for mobile (750px width)
       const img = document.createElement('img');
       img.loading = 'lazy';
-      img.src = url;
+      const imgUrl = new URL(baseUrl);
+      imgUrl.searchParams.set('width', '750');
+      // imgUrl.searchParams.set('format', 'jpg');
+      img.src = imgUrl.toString();
       if (a.href !== a.innerText) {
         img.setAttribute('alt', a.innerText);
       }
