@@ -112,6 +112,15 @@ export function decorateImages(main) {
   });
 }
 
+export function decorateImagesWithWidthHeight(main) {
+  main.querySelectorAll('img').forEach((img) => {
+    const imgUrl = new URL(img.src);
+    imgUrl.searchParams.set('width', '1620');
+    imgUrl.searchParams.set('height', '1080');
+    img.src = imgUrl.toString();
+  });
+}
+
 /**
  * Move instrumentation attributes from a given element to another given element.
  * @param {Element} from the element to copy attributes from
@@ -163,6 +172,7 @@ export function decorateMain(main) {
   decorateIcons(main);
   decorateExternalImages(main);
   decorateImages(main);
+  decorateImagesWithWidthHeight(main);
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
