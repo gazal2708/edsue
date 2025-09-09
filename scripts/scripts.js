@@ -113,10 +113,13 @@ export function decorateImages(main) {
 }
 
 export function decorateImagesWithWidthHeight(main) {
-  main.querySelectorAll('img').forEach((img) => {
-    img.width = '1620';
-    img.height = '1080';
-  });
+  const urlSpec = window.location.href.endsWith('test-page');
+  if (urlSpec) {
+    main.querySelectorAll('img').forEach((img) => {
+      img.width = '1620';
+      img.height = '1080';
+    });
+  }
 }
 
 /**
