@@ -114,10 +114,15 @@ export function decorateImages(main) {
 
 export function decorateImagesWithWidthHeight(main) {
   main.querySelectorAll('img').forEach((img) => {
+    // Remove width and height from URL parameters if they exist
     const imgUrl = new URL(img.src);
-    imgUrl.searchParams.set('width', '1620');
-    imgUrl.searchParams.set('height', '1080');
+    imgUrl.searchParams.delete('width');
+    imgUrl.searchParams.delete('height');
     img.src = imgUrl.toString();
+
+    // Set width and height as HTML attributes
+    img.width = '1620';
+    img.height = '1080';
   });
 }
 
