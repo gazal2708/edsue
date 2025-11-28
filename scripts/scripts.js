@@ -39,13 +39,15 @@ export function decorateExternalImages(main) {
   main.querySelectorAll('a[href]').forEach((a) => {
     // Check if it's a DM Open API URL
     if (isDMOpenAPIUrl(a.href)) {
-      const baseUrl = new URL(a.href);
+      let originalUrl = a.href;
 
       // Remove /renditions/original from the path to support rotate parameter
       // DM OpenAPI rotate only works with proper URL format (without /renditions/original)
-      if (baseUrl.pathname.includes('/renditions/original')) {
-        baseUrl.pathname = baseUrl.pathname.replace('/renditions/original', '');
+      if (originalUrl.includes('/renditions/original')) {
+        originalUrl = originalUrl.replace('/renditions/original', '');
       }
+
+      const baseUrl = new URL(originalUrl);
 
       // Check if URL contains 'test-page-v3-nocache' to toggle cache=off
       const noCache = window.location.href.includes('test-page-v3-nocache');
@@ -70,7 +72,7 @@ export function decorateExternalImages(main) {
       // Source 1: WebP for mobile (750px width)
       const source1 = document.createElement('source');
       source1.type = 'image/webp';
-      const url1 = new URL(baseUrl);
+      const url1 = new URL(baseUrl.href);
       url1.searchParams.set('width', '750');
       url1.searchParams.set('format', 'webply');
       if (noCache) {
@@ -85,7 +87,7 @@ export function decorateExternalImages(main) {
       const source3 = document.createElement('source');
       source3.type = 'image/jpeg';
       source3.media = '(min-width: 600px)';
-      const url3 = new URL(baseUrl);
+      const url3 = new URL(baseUrl.href);
       url3.searchParams.set('width', '2000');
       url3.searchParams.set('format', 'jpg');
       if (noCache) {
@@ -100,7 +102,7 @@ export function decorateExternalImages(main) {
       const source2 = document.createElement('source');
       source2.type = 'image/webp';
       source2.media = '(min-width: 600px)';
-      const url2 = new URL(baseUrl);
+      const url2 = new URL(baseUrl.href);
       url2.searchParams.set('width', '2000');
       url2.searchParams.set('format', 'webply');
       if (noCache) {
@@ -116,7 +118,7 @@ export function decorateExternalImages(main) {
       img.loading = 'lazy';
       img.width = '1620';
       img.height = '1080'; // You can adjust this based on your aspect ratio needs
-      const imgUrl = new URL(baseUrl);
+      const imgUrl = new URL(baseUrl.href);
       imgUrl.searchParams.set('width', '750');
       imgUrl.searchParams.set('format', 'jpg');
       if (noCache) {
