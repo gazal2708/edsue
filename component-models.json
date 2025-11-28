@@ -232,25 +232,31 @@
         "valueType": "string"
       },
       {
-        "component": "select",
-        "name": "flip",
-        "label": "Flip",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "None",
-            "value": ""
-          },
-          {
-            "name": "Horizontal",
-            "value": "horizontal"
-          },
-          {
-            "name": "Vertical",
-            "value": "vertical"
+"component": "select",
+          "name": "flip",
+          "value": "",
+          "label": "Flip",
+          "description": "Select the flip for the image either vertical or horizontal or vertical & horizontal",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "None",
+              "value": ""
+            },
+            {
+              "name": "Vertical",
+              "value": "v"
+            },
+            {
+              "name": "Horizontal",
+              "value": "h"
+            },
+            {
+              "name": "Horizontal & Vertical",
+              "value": "hv"
+            }
+          ]
           }
-        ]
-      }
     ]
   },
   {
