@@ -360,32 +360,63 @@
       },
       {
         "component": "text",
-        "name": "imageAlt",
-        "label": "Image Alt Text",
-        "valueType": "string"
+        "name": "hideAltText",
+        "label": "Hide Alt Text (true/false)",
+        "valueType": "string",
+        "value": ""
       },
       {
         "component": "text",
-        "name": "heading",
-        "label": "Heading",
+        "name": "caption",
+        "label": "Caption (optional)",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "badge",
+        "label": "Badge (optional)",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Category (optional)",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string",
+        "value": "<h2>Our fleet</h2>"
+      },
+      {
+        "component": "text",
+        "name": "empty1",
+        "value": "",
         "valueType": "string"
       },
       {
         "component": "richtext",
-        "name": "text",
-        "label": "Text",
-        "valueType": "string"
+        "name": "bodyText",
+        "label": "Body Text",
+        "valueType": "string",
+        "value": "Learn about the features of the aircraft in our fleet, including the Airbus A380 and Boeing 787-9 Dreamliner."
+      },
+      {
+        "component": "richtext",
+        "name": "ctas",
+        "label": "Call to Action Links",
+        "valueType": "string",
+        "value": "<a href=\"https://www.qantas.com/au/en/about-us/our-company/fleet.html\">Explore our fleet</a>"
       },
       {
         "component": "text",
-        "name": "linkText",
-        "label": "Link Text",
-        "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "linkUrl",
-        "label": "Link URL",
+        "name": "empty2",
+        "value": "",
         "valueType": "string"
       }
     ]
