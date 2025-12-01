@@ -286,7 +286,15 @@
         "component": "text",
         "name": "classes",
         "label": "Layout",
-        "valueType": "string"
+        "valueType": "string",
+        "description": "e.g., layout-1-col"
+      },
+      {
+        "component": "text",
+        "name": "alignment",
+        "label": "Alignment",
+        "valueType": "string",
+        "description": "e.g., left-aligned"
       }
     ]
   },
@@ -294,21 +302,22 @@
     "id": "icon-and-text",
     "fields": [
       {
-        "component": "custom-asset-namespace:custom-asset",
+        "component": "text",
         "name": "icon",
-        "label": "Icon",
-        "configUrl": "/content/dam/Gazal-ue-site/config.json",
-        "valueType": "string"
-      },
-      {
-        "component": "custom-asset-namespace:custom-asset-mimetype",
+        "label": "Icon Class",
         "valueType": "string",
-        "name": "iconMimeType"
+        "description": "Icon class name (e.g., icon-runway_pictogram_roo)"
       },
       {
         "component": "text",
-        "name": "iconAlt",
-        "label": "Icon Alt Text",
+        "name": "empty1",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "empty2",
+        "value": "",
         "valueType": "string"
       },
       {
@@ -321,6 +330,18 @@
         "component": "richtext",
         "name": "text",
         "label": "Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Link Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "linkUrl",
+        "label": "Link URL",
         "valueType": "string"
       }
     ]
