@@ -96,10 +96,8 @@ function processSourceUrl(url, crop, width, height, extension = 'avif') {
   const newUrl = new URL(url, window.location.origin);
   newUrl.pathname = newUrl.pathname.replace(/\.[a-zA-Z0-9]+$/, `.${extension}`);
   newUrl.searchParams.delete('assetname');
-  // Use 'crop' parameter instead of 'smartcrop' for DM OpenAPI
-  if (crop) {
-    newUrl.searchParams.set('crop', crop);
-  }
+  // Don't use crop parameter - just use width and height for DM OpenAPI
+  // Smart crops need to be pre-configured in DM, so we'll rely on width/height only
   newUrl.searchParams.set('width', width);
   newUrl.searchParams.set('height', height);
   newUrl.searchParams.set('format', extension);
