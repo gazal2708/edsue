@@ -47,6 +47,38 @@
   height: var(--sizing-alias-fixed-900);
 }
 
+/* Icon span styles */
+.icontext-icon-container .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  font-size: 2rem;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  color: #333;
+}
+
+/* Specific icon styles - add your own icon classes here */
+.icon-runway_pictogram_roo::before {
+  content: "🦘";
+  font-size: 2.5rem;
+}
+
+/* Add more icon classes as needed */
+.icon-plane::before {
+  content: "✈️";
+}
+
+.icon-star::before {
+  content: "⭐";
+}
+
+.icon-heart::before {
+  content: "❤️";
+}
+
 /* CTA links */
 .icontext-links-container {
   display: flex;

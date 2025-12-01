@@ -321,7 +321,8 @@
         "component": "richtext",
         "name": "content",
         "label": "Content (H2 + paragraphs + links)",
-        "valueType": "string"
+        "valueType": "string",
+        "value": "<h2>Our company</h2><p>The red tail and iconic kangaroo logo stands for excellence in safety, reliability, engineering and customer service. The Qantas Group is made up of two complementary airline brands – Qantas and Jetstar – as well as subsidiary companies, ranging from Qantas Loyalty to Qantas Freight. Our airline brands operate regional, domestic and international services across Australia and the world.</p><p><a href=\"https://www.qantas.com/au/en/qantas-group.html\">More about the Qantas Group</a></p>"
       }
     ]
   },
