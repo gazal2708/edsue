@@ -206,7 +206,7 @@
       },
       {
         "component": "text",
-        "name": "imageTitle",
+        "name": "imageAlt",
         "label": "Alt Text",
         "valueType": "string"
       },
