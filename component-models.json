@@ -300,15 +300,15 @@
     "id": "icon-and-text",
     "fields": [
       {
-        "component": "reference",
-        "name": "image",
-        "label": "Icon Image (optional)",
+        "component": "text",
+        "name": "icon",
+        "label": "Icon Class (e.g., icon-runway_pictogram_roo) or upload image",
         "valueType": "string"
       },
       {
         "component": "text",
         "name": "imageAlt",
-        "label": "Alt Text",
+        "label": "Alt Text (for images only)",
         "valueType": "string"
       },
       {

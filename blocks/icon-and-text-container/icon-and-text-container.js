@@ -82,12 +82,20 @@ function decorateItem(parentBlock, block, classes = [], placeholder = {}) {
   // Icon container
   const iconContainer = createElementWithClasses('div', 'icontext-icon-container');
   const imgEl = icon.querySelector('img');
-  // Only append image if it exists
+  const iconText = getTextContent(icon).trim();
+  
+  // Check if there's an image or icon class text
   if (imgEl) {
+    // If there's an image, use it
     if (getTextContent(hideAltText) !== 'true') {
       imgEl.alt = getTextContent(altText);
     }
     iconContainer.appendChild(imgEl);
+  } else if (iconText) {
+    // If there's text, create a span with icon classes
+    const iconSpan = document.createElement('span');
+    iconSpan.className = `icon ${iconText}`;
+    iconContainer.appendChild(iconSpan);
   }
 
   // Wrapper for content, and links
