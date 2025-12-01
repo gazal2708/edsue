@@ -212,6 +212,18 @@
       },
       {
         "component": "text",
+        "name": "empty1",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "empty2",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
         "name": "title",
         "label": "Title"
       },
@@ -251,6 +263,18 @@
         "name": "text",
         "value": "",
         "label": "Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "empty3",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "empty4",
+        "value": "",
         "valueType": "string"
       }
     ]
