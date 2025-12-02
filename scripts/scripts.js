@@ -290,7 +290,7 @@ function buildAutoBlocks() {
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
-  decorateButtons(main);
+  // decorateButtons(main); // Commented out - blocks handle their own button styling
   decorateIcons(main);
   decorateExternalImages(main);
   // decorateImagesWithWidthHeight(main);
