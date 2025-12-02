@@ -206,13 +206,13 @@ async function decorateItem(parentBlock, block, layoutClass, classes = []) {
     </div>
   `;
 
-  const imageContainer = `
+  const imageContainer = pictureEl ? `
     <figure class="imagetext-image-container">
       ${badgeHTML}
       ${pictureEl.outerHTML}
       ${captionHTML}
     </figure>
-  `;
+  ` : '';
 
   block.innerHTML = classes.includes('image-right')
     ? `${contentContainer}${imageContainer}`
