@@ -229,7 +229,12 @@
                 "template": {
                   "name": "Link List",
                   "model": "link-list",
-                  "filter": "link-list"
+                  "filter": "link-list",
+                  "headingType": "h2",
+                  "heading": "Heading",
+                  "childPagesOrderBy": "jcr:title",
+                  "childPagesSortOrder": "ascending",
+                  "classes": "hyper-links"
                 }
               }
             }
