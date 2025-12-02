@@ -183,8 +183,12 @@ export default async function decorate(block) {
     [...linkListItems].forEach(async (row) => {
       const li = document.createElement('li');
       moveInstrumentation(row, li);
-      while (row.querySelector('a')) {
-        const link = row.querySelector('a');
+      
+      // Unwrap nested divs to get to the content
+      let contentRow = promoteFirstChildIfExists(row) || row;
+      
+      while (contentRow.querySelector('a')) {
+        const link = contentRow.querySelector('a');
         if (link) {
           link.removeAttribute('title');
           link.classList.add(isSimpleLinks ? 'body-02' : 'body-01');

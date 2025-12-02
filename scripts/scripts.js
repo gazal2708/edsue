@@ -12,6 +12,25 @@ import {
   loadCSS,
 } from './aem.js';
 
+const CONTENT_ROOT_PATH = '/content/Gazal-ue-site';
+
+/**
+ * Helper function that converts an AEM path into an EDS path.
+ */
+export function getEDSLink(aemPath) {
+  if (!aemPath) {
+    return '';
+  }
+
+  let aemRoot = CONTENT_ROOT_PATH;
+
+  if (window.hlx && window.hlx.aemRoot) {
+    aemRoot = window.hlx.aemRoot;
+  }
+
+  return aemPath.replace(aemRoot, '').replace('.html', '');
+}
+
 /**
  * Gets path details from the current URL
  * @returns {object} Object containing path details
