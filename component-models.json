@@ -491,11 +491,6 @@
         "valueType": "string"
       },
       {
-        "component": "custom-asset-namespace:custom-asset-mimetype",
-        "valueType": "string",
-        "name": "imageMimeType"
-      },
-      {
         "component": "text",
         "name": "imageTitle",
         "label": "Alt Text",
@@ -584,10 +579,16 @@
     "id": "logo",
     "fields": [
       {
-        "component": "reference",
+        "component": "custom-asset-namespace:custom-asset",
         "name": "image",
         "label": "Logo Image",
+        "configUrl": "/content/dam/Gazal-ue-site/config.json",
         "valueType": "string"
+      },
+      {
+        "component": "custom-asset-namespace:custom-asset-mimetype",
+        "valueType": "string",
+        "name": "imageMimeType"
       },
       {
         "component": "text",
