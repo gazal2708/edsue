@@ -10,8 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
-/* Import design tokens */
+/* Import design tokens and normalize */
 @import url('tokens.css');
+@import url('normalize.css');
 
 :root {
   /* colors */
