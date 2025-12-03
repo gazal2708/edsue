@@ -730,16 +730,20 @@ export default async function decorate(block) {
   // For UE: auto-detect navigation sections
   // Navigation sections are those that:
   // 1. Come after brand/utilities sections (position 2+)
-  // 2. Contain menu blocks OR have data-isnavigation attribute
+  // 2. Contain menu-wrapper blocks (not just any blocks)
+  // 3. Are NOT the header-supporting section
   const allSections = [...fragment.children];
   const mainNavSections = allSections.filter((section, index) => {
     // Check for explicit data attribute (for DA)
     if (section.dataset.isnavigation === 'true') return true;
 
-    // For UE: sections after position 1 (brand=0, utilities=1) that contain menus
+    // Skip header-supporting section (contains Help, etc.)
+    if (section.classList.contains('header-supporting')) return false;
+
+    // For UE: sections after position 1 (brand=0, utilities=1) that contain menu-wrapper
     if (index >= 2) {
-      const hasMenus = section.querySelector('.menu');
-      return hasMenus !== null;
+      const hasMenuWrappers = section.querySelector('.menu-wrapper');
+      return hasMenuWrappers !== null;
     }
     return false;
   });
