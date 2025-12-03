@@ -351,21 +351,22 @@ function decorateNavigationBar(mainNavSections, supportingSection) {
   mainNavSections.forEach((navSection) => {
     const li = createElementWithClasses('li', firstLevelMenuClass);
 
-    // For UE: get title from data attribute, first text block, or first menu heading
+    // For UE: get title from data attribute or from content wrappers
     let navTitle = navSection.dataset.navigationTitle;
     let titleElement = null;
 
     if (!navTitle) {
-      // Try to get from first direct child that's not a menu-wrapper
-      const firstChild = navSection.querySelector(':scope > div:not(.menu-wrapper)');
-      if (firstChild) {
-        const textEl = firstChild.querySelector('p');
+      // Try default-content-wrapper first (UE creates this for text blocks)
+      const contentWrapper = navSection.querySelector('.default-content-wrapper');
+      if (contentWrapper) {
+        const textEl = contentWrapper.querySelector('p');
         if (textEl) {
           navTitle = getTextContent(textEl);
-          titleElement = firstChild; // Store for removal later
+          titleElement = contentWrapper;
         }
       }
     }
+
     if (!navTitle) {
       // Fallback: use first menu heading
       const firstMenuHeading = navSection.querySelector('.menu-heading');
