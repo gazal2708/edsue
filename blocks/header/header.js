@@ -728,24 +728,17 @@ export default async function decorate(block) {
   supportingSection.prepend(mobileRegionSelector || '');
 
   // For UE: auto-detect navigation sections
-  // Navigation sections are those that:
-  // 1. Come after brand/utilities sections (position 2+)
-  // 2. Contain menu-wrapper blocks (not just any blocks)
-  // 3. Are NOT the header-supporting section
+  // Navigation sections are: positions 2 to (length-2)
+  // Position 0: brand, Position 1: utilities, Last position: supporting (Help)
   const allSections = [...fragment.children];
+  const lastIndex = allSections.length - 1;
   const mainNavSections = allSections.filter((section, index) => {
     // Check for explicit data attribute (for DA)
     if (section.dataset.isnavigation === 'true') return true;
 
-    // Skip header-supporting section (contains Help, etc.)
-    if (section.classList.contains('header-supporting')) return false;
-
-    // For UE: sections after position 1 (brand=0, utilities=1) that contain menu-wrapper
-    if (index >= 2) {
-      const hasMenuWrappers = section.querySelector('.menu-wrapper');
-      return hasMenuWrappers !== null;
-    }
-    return false;
+    // For UE: include sections between utilities and supporting
+    // Skip: first 2 sections (brand, utilities) and last section (supporting)
+    return index >= 2 && index < lastIndex;
   });
 
   const navigationBar = decorateNavigationBar(mainNavSections, supportingSection);
