@@ -48,13 +48,13 @@ export function getPathDetails() {
   };
 
   let langRegion = 'en-au';
+  const ISO_2_LETTER = /^[a-z]{2}$/;
 
   if (window.hlx && window.hlx.isExternalSite === true) {
     const hlxLangRegion = window.hlx.langregion?.toLowerCase();
     if (hlxLangRegion) {
       langRegion = hlxLangRegion;
     } else if (parts.length >= 2) {
-      const ISO_2_LETTER = /^[a-z]{2}$/;
       const region = isContentPath ? safeLangGet(2) : safeLangGet(0);
       let language = isContentPath ? safeLangGet(3) : safeLangGet(1);
       [language] = language.split('_');
@@ -63,15 +63,30 @@ export function getPathDetails() {
       }
     }
   } else {
-    langRegion = isContentPath ? safeLangGet(2) : safeLangGet(0);
+    // Try to extract lang-region from path
+    const extractedLangRegion = isContentPath ? safeLangGet(2) : safeLangGet(0);
+    
+    // Only use extracted value if it matches lang-region pattern (e.g., "en-au")
+    if (extractedLangRegion && extractedLangRegion.includes('-')) {
+      const [extractedLang, extractedRegion] = extractedLangRegion.split('-');
+      if (ISO_2_LETTER.test(extractedLang) && ISO_2_LETTER.test(extractedRegion)) {
+        langRegion = extractedLangRegion;
+      }
+    }
+    // Otherwise keep default 'en-au'
   }
 
   let [lang, region] = langRegion.split('-');
   const isLanguageMasters = langRegion === 'language-masters';
 
-  if (region === 'masters') region = 'au';
-  if (lang === 'language') lang = 'en';
-  if (isLanguageMasters) langRegion = 'en-au';
+  // Safety checks
+  if (!lang || lang === '' || lang === 'language') lang = 'en';
+  if (!region || region === '' || region === 'masters') region = 'au';
+  if (isLanguageMasters) {
+    langRegion = 'en-au';
+    lang = 'en';
+    region = 'au';
+  }
 
   const prefix = pathname.substring(0, pathname.indexOf(`/${langRegion}`)) || '';
   const suffix = pathname.substring(pathname.indexOf(`/${langRegion}`) + langRegion.length + 1) || '';
