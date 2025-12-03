@@ -91,6 +91,7 @@
   align-items: center;
   color: var(--color-alias-text-secondary);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .block.menu:not(.shortcuts) a.menu-link:hover {

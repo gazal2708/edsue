@@ -129,6 +129,14 @@ export default function decorate(block) {
       linkElement.classList.add('menu-link', 'body-02');
       linkElement.removeAttribute('title');
 
+      // If no href exists, extract URL from text content
+      if (!linkElement.href || linkElement.href === window.location.href) {
+        const urlText = unwrappedLinkEl?.textContent?.trim() || '';
+        if (urlText) {
+          linkElement.href = urlText;
+        }
+      }
+
       if (isCurrentUrl(linkElement?.href)) {
         linkElement.setAttribute('aria-current', 'page');
       }
