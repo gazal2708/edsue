@@ -8,11 +8,10 @@ import {
 import subscribeToResizeListener from '../../scripts/utils/resize-listener.js';
 import {
   formatStringAsId,
-  isAuthorMode,
   attachTestId,
 } from '../../scripts/utils/common-utils.js';
 import trapTabKey from '../../scripts/utils/accessibility.js';
-import { fetchLanguagePlaceholders, getPathDetails } from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders } from '../../scripts/scripts.js';
 import {
   EVENT_NAME,
   MENU_TYPE,
@@ -351,7 +350,22 @@ function decorateNavigationBar(mainNavSections, supportingSection) {
 
   mainNavSections.forEach((navSection) => {
     const li = createElementWithClasses('li', firstLevelMenuClass);
-    const navTitle = navSection.dataset.navigationTitle;
+
+    // For UE: get title from data attribute, first text block, or first menu heading
+    let navTitle = navSection.dataset.navigationTitle;
+    if (!navTitle) {
+      // Try to get from first text content (UE pattern)
+      const firstText = navSection.querySelector(':scope > div > div > p');
+      if (firstText) {
+        navTitle = getTextContent(firstText);
+        firstText.closest('div').remove(); // Remove the title div
+      }
+    }
+    if (!navTitle) {
+      // Fallback: use first menu heading
+      const firstMenuHeading = navSection.querySelector('.menu-heading');
+      navTitle = firstMenuHeading ? getTextContent(firstMenuHeading) : 'Menu';
+    }
 
     const menuButton = createElementWithClasses('button', mainMenuButtonClass, 'body-02');
     menuButton.textContent = navTitle;
@@ -386,16 +400,12 @@ function decorateNavigationBar(mainNavSections, supportingSection) {
     const submenus = navSection.querySelectorAll('.menu-wrapper');
     const submenusAnchor = navSection.querySelectorAll('.menu-wrapper a');
 
-    submenusAnchor.forEach((anchor) =>
-      anchor.addEventListener('click', () =>
-        triggerMenuClickEvent(
-          anchor?.href,
-          anchor?.querySelector('span')?.textContent,
-          anchor?.getAttribute('data-wae-menu-type'),
-          anchor?.getAttribute('data-wae-menu-level'),
-        ),
-      ),
-    );
+    submenusAnchor.forEach((anchor) => anchor.addEventListener('click', () => triggerMenuClickEvent(
+      anchor?.href,
+      anchor?.querySelector('span')?.textContent,
+      anchor?.getAttribute('data-wae-menu-type'),
+      anchor?.getAttribute('data-wae-menu-level'),
+    )));
     const firstSubMenuBlock = submenus?.[0]?.firstElementChild;
     firstSubMenuBlock.classList.add(expandedClass);
     const accordionButton = firstSubMenuBlock.querySelector(
@@ -654,14 +664,14 @@ export default async function decorate(block) {
   headerBlock = block;
 
   // Simplified path - just use /nav directly
-  let navPath = '/nav';
-  
+  const navPath = '/nav';
+
   // For production sites with language folders, use:
   // let navPath = `/${getPathDetails().langRegion}/fragments/nav`;
   // if (isAuthorMode() && navPath.startsWith('/language-masters')) {
   //   navPath = `/${getPathDetails().langRegion}/en/fragments/nav`;
   // }
-  
+
   const fragment = await loadFragment(navPath);
 
   placeholder = await fetchLanguagePlaceholders();
@@ -698,7 +708,23 @@ export default async function decorate(block) {
   const supportingSection = fragment.querySelector(`.${headerSupportingClass}`);
   supportingSection.prepend(mobileRegionSelector || '');
 
-  const mainNavSections = [...fragment.querySelectorAll('[data-isnavigation="true"]')];
+  // For UE: auto-detect navigation sections
+  // Navigation sections are those that:
+  // 1. Come after brand/utilities sections (position 2+)
+  // 2. Contain menu blocks OR have data-isnavigation attribute
+  const allSections = [...fragment.children];
+  const mainNavSections = allSections.filter((section, index) => {
+    // Check for explicit data attribute (for DA)
+    if (section.dataset.isnavigation === 'true') return true;
+
+    // For UE: sections after position 1 (brand=0, utilities=1) that contain menus
+    if (index >= 2) {
+      const hasMenus = section.querySelector('.menu');
+      return hasMenus !== null;
+    }
+    return false;
+  });
+
   const navigationBar = decorateNavigationBar(mainNavSections, supportingSection);
 
   topBarContent.append(brandSection || null);
@@ -716,16 +742,16 @@ export default async function decorate(block) {
   if (block.querySelector('.shopping-cart-widget')) {
     import('../shopping-cart-widget/shopping-cart-widget.js')
       .then(({ loadShoppingCartScripts }) => loadShoppingCartScripts())
-      .catch((error) => {
-        console.error('Failed to load shopping cart scripts:', error);
+      .catch(() => {
+        // Failed to load shopping cart scripts - showing fallback icon
       });
   }
 
   if (block.querySelector('.qdd-login-ribbon-host')) {
     import('../login/login.js')
       .then(({ loadLoginScripts }) => loadLoginScripts())
-      .catch((error) => {
-        console.error('Failed to load login scripts:', error);
+      .catch(() => {
+        // Failed to load login scripts - showing fallback button
       });
   }
 }
