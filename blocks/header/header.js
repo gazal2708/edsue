@@ -700,11 +700,14 @@ export default async function decorate(block) {
   const topBar = createElementWithClasses('div', 'top-bar');
   const topBarContent = createElementWithClasses('div', 'top-bar-content');
 
-  const classes = ['brand', 'utilities', 'supporting'];
-  classes.forEach((c, i) => {
-    const section = fragment.children[i];
-    if (section) section.classList.add(`header-${c}`);
-  });
+  // Add classes to specific sections
+  // Brand: position 0, Utilities: position 1, Supporting: LAST position
+  const allSections = [...fragment.children];
+  if (allSections[0]) allSections[0].classList.add('header-brand');
+  if (allSections[1]) allSections[1].classList.add('header-utilities');
+  if (allSections.length > 2) {
+    allSections[allSections.length - 1].classList.add('header-supporting');
+  }
 
   setViewHeight();
 
@@ -725,14 +728,16 @@ export default async function decorate(block) {
   mobileRegionSelector?.classList.add('mobile-region-selector-wrapper');
 
   const supportingSection = fragment.querySelector(`.${headerSupportingClass}`);
-  supportingSection.prepend(mobileRegionSelector || '');
+  if (supportingSection && mobileRegionSelector) {
+    supportingSection.prepend(mobileRegionSelector);
+  }
 
   // For UE: auto-detect navigation sections
   // Navigation sections are: positions 2 to (length-2)
   // Position 0: brand, Position 1: utilities, Last position: supporting (Help)
-  const allSections = [...fragment.children];
-  const lastIndex = allSections.length - 1;
-  const mainNavSections = allSections.filter((section, index) => {
+  const navigationSections = [...fragment.children];
+  const lastIndex = navigationSections.length - 1;
+  const mainNavSections = navigationSections.filter((section, index) => {
     // Check for explicit data attribute (for DA)
     if (section.dataset.isnavigation === 'true') return true;
 
