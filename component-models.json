@@ -584,28 +584,25 @@
     "id": "logo",
     "fields": [
       {
-        "component": "custom-asset-namespace:custom-asset",
-        "name": "image",
-        "label": "Logo Image",
-        "configUrl": "/content/dam/Gazal-ue-site/config.json",
-        "valueType": "string"
-      },
-      {
-        "component": "custom-asset-namespace:custom-asset-mimetype",
+        "component": "text",
+        "name": "iconFilename",
+        "label": "Logo Icon Filename (e.g., runway_brand_logo_master_qantas_horiz.svg)",
         "valueType": "string",
-        "name": "imageMimeType"
+        "value": "runway_brand_logo_master_qantas_horiz.svg"
       },
       {
         "component": "text",
         "name": "imageAlt",
         "label": "Alt Text",
-        "valueType": "string"
+        "valueType": "string",
+        "value": "Home, Qantas Airways Logo"
       },
       {
-        "component": "aem-content",
+        "component": "text",
         "name": "link",
         "label": "Link URL",
-        "valueType": "string"
+        "valueType": "string",
+        "value": "/"
       }
     ]
   },

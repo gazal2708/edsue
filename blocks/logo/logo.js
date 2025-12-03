@@ -3,27 +3,29 @@ import { getTextContent } from '../../scripts/utils/dom.js';
 const decorate = (block) => {
   if (!block) return;
 
-  // Account for imageMimeType field from custom-asset
-  const [iconCol, mimeTypeCol, altTextCol, urlCol] = block.children ?? [];
-  
-  // If using custom-asset, iconCol has image, mimeTypeCol is mimetype, altTextCol is alt, urlCol is link
-  // If using regular reference, iconCol has image, urlCol is link (no mimetype)
-  
-  // Try to find the URL column (has <a> tag)
-  const urlColumn = [...block.children].find(col => col.querySelector('a'));
-  if (!urlColumn) return;
-  
-  const anchor = urlColumn.querySelector('a');
-  const targetHref = anchor?.href ?? '#';
-  const logoAltText = getTextContent(anchor) ?? '';
+  // New structure: [iconFilename, altText, linkUrl]
+  const [iconCol, altTextCol, urlCol] = block.children ?? [];
 
-  const imgEl = iconCol?.querySelector('img');
+  // Get values, unwrap from nested divs/p tags
+  const unwrap = (el) => {
+    const child = el?.firstElementChild;
+    return (child?.tagName === 'DIV' || child?.tagName === 'P') ? child : el;
+  };
+
+  const iconText = getTextContent(unwrap(iconCol))?.trim();
+  const logoAltText = getTextContent(unwrap(altTextCol))?.trim() || 'Home, Qantas Airways Logo';
+  const targetHref = getTextContent(unwrap(urlCol))?.trim() || '/';
+
   let imgMarkup = '';
 
-  if (imgEl != null) {
-    imgMarkup = `<span class="visually-hidden">${logoAltText}</span>${imgEl?.outerHTML}`;
+  if (iconText && iconText.endsWith('.svg')) {
+    // Use text-based icon filename
+    const codeBasePath = window.hlx?.codeBasePath || '';
+    imgMarkup = `<span class="visually-hidden">${logoAltText}</span><img data-icon-name="${iconText.replace('.svg', '')}" src="${codeBasePath}/icons/${iconText}" alt="" loading="lazy">`;
   }
 
-  block.innerHTML = `<a href="${targetHref}">${imgMarkup}</a>`;
+  if (imgMarkup) {
+    block.innerHTML = `<a href="${targetHref}" data-wae-event="return_home_click">${imgMarkup}</a>`;
+  }
 };
 export default decorate;
