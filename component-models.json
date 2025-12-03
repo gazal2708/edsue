@@ -636,9 +636,9 @@
         "valueType": "string"
       },
       {
-        "component": "reference",
+        "component": "text",
         "name": "icon",
-        "label": "Icon (optional)",
+        "label": "Icon filename (e.g., runway_icon_social_facebook.svg)",
         "valueType": "string"
       }
     ]

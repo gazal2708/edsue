@@ -36,8 +36,7 @@ function getMenuListId(headingText, firstLinkEl) {
 }
 
 export default function decorate(block) {
-  const isAccordionMenu =
-    block.classList.contains('icon') || block.classList.contains('horizontal');
+  const isAccordionMenu = block.classList.contains('icon') || block.classList.contains('horizontal');
   const ul = createElementWithClasses('ul', 'menu-list');
 
   const headingContainer = createElementWithClasses('div', 'menu-heading-container');
@@ -110,17 +109,17 @@ export default function decorate(block) {
       moveInstrumentation(div, li);
 
       const [titleEl, linkEl, iconEl] = [...div.children];
-      
+
       // Unwrap content from Universal Editor's nested divs/p tags
       const unwrap = (el) => {
         const child = el?.firstElementChild;
         return child?.tagName === 'DIV' || child?.tagName === 'P' ? child : el;
       };
-      
+
       const unwrappedTitleEl = unwrap(titleEl);
       const unwrappedLinkEl = unwrap(linkEl);
       const unwrappedIconEl = iconEl ? unwrap(iconEl) : null;
-      
+
       const title = unwrappedTitleEl?.textContent.trim() || '';
 
       const spanElement = document.createElement('span');
@@ -137,13 +136,19 @@ export default function decorate(block) {
       linkElement.textContent = '';
       linkElement.append(spanElement);
 
-      const iconHref = unwrappedIconEl?.querySelector('img')?.src;
-      const fileName = iconHref?.split('/').pop();
+      // Check if icon field contains text (filename) or an img tag
+      let iconFileName = unwrappedIconEl?.textContent?.trim();
 
-      if (iconHref) {
-        // Get filename from icon path
+      // If no text, check for img tag (backward compatibility)
+      if (!iconFileName) {
+        const iconHref = unwrappedIconEl?.querySelector('img')?.src;
+        iconFileName = iconHref?.split('/').pop();
+      }
+
+      if (iconFileName) {
+        // Get filename from icon path or text
         const newIconElement = document.createElement('img');
-        newIconElement.src = `${window.hlx.codeBasePath}/icons/${fileName}`;
+        newIconElement.src = `${window.hlx.codeBasePath}/icons/${iconFileName}`;
         newIconElement.alt = title;
         linkElement.prepend(newIconElement);
       }
