@@ -641,34 +641,20 @@
     "id": "region-selector",
     "fields": [
       {
-        "component": "text",
-        "name": "placeholder",
-        "label": "Placeholder Text",
+        "component": "aem-content",
+        "name": "link",
+        "label": "Region Selection Page Link",
         "valueType": "string",
-        "value": "Region Selector"
+        "value": "/en-au/region-selection"
       }
     ]
   },
   {
     "id": "login",
-    "fields": [
-      {
-        "component": "text",
-        "name": "loginUrl",
-        "label": "Login URL",
-        "valueType": "string"
-      }
-    ]
+    "fields": []
   },
   {
     "id": "shopping-cart-widget",
-    "fields": [
-      {
-        "component": "text",
-        "name": "cartUrl",
-        "label": "Shopping Cart URL",
-        "valueType": "string"
-      }
-    ]
+    "fields": []
   }
 ]
