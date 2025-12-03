@@ -572,6 +572,9 @@ function decorateNavigationBar(mainNavSections, supportingSection) {
     });
 
     mainNavigation.appendChild(li);
+
+    // Remove the original section from DOM since we've moved its content
+    navSection.remove();
   });
 
   navigationBarContent.append(mainNavigation);
