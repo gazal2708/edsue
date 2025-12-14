@@ -162,10 +162,108 @@ function isDMOpenAPIUrl(src) {
   return /^(https?:\/\/(.*)\/adobe\/assets\/urn:aaid:aem:(.*))/gm.test(src);
 }
 
+function isScene7Url(src) {
+  return /^(https?:\/\/(.*\.)?scene7\.com\/is\/image\/(.*))/i.test(src);
+}
+
 export function decorateExternalImages(main) {
   main.querySelectorAll('a[href]').forEach((a) => {
-    // Check if it's a DM Open API URL
-    if (isDMOpenAPIUrl(a.href)) {
+    // Check if it's a Scene7 URL
+    if (isScene7Url(a.href)) {
+      const baseUrl = new URL(a.href);
+
+      // Check if URL contains 'test-page-v3-nocache' to toggle cache=off
+      const noCache = window.location.href.includes('test-page-v3-nocache');
+
+      const pic = document.createElement('picture');
+
+      // Check if there's a rotation value in the next sibling div
+      let rotation = null;
+      const parentDiv = a.closest('div');
+      if (parentDiv && parentDiv.parentElement) {
+        const nextDiv = parentDiv.parentElement.nextElementSibling;
+        if (nextDiv) {
+          const rotationDiv = nextDiv.querySelector('div');
+          if (rotationDiv && rotationDiv.textContent.trim()) {
+            rotation = rotationDiv.textContent.trim();
+            // Remove the rotation div from markup
+            nextDiv.remove();
+          }
+        }
+      }
+
+      // Source 1: WebP for mobile (750px width)
+      const source1 = document.createElement('source');
+      source1.type = 'image/webp';
+      const url1 = new URL(baseUrl);
+      url1.searchParams.set('wid', '750');
+      url1.searchParams.set('fmt', 'webp-alpha');
+      if (noCache) {
+        url1.searchParams.set('cache', 'off');
+      }
+      if (rotation) {
+        url1.searchParams.set('rotate', rotation);
+      }
+      source1.srcset = url1.toString();
+
+      // Source 3: JPEG for desktop (2000px width)
+      const source3 = document.createElement('source');
+      source3.type = 'image/jpeg';
+      source3.media = '(min-width: 600px)';
+      const url3 = new URL(baseUrl);
+      url3.searchParams.set('wid', '2000');
+      url3.searchParams.set('fmt', 'jpg');
+      url3.searchParams.set('qlt', '85');
+      if (noCache) {
+        url3.searchParams.set('cache', 'off');
+      }
+      if (rotation) {
+        url3.searchParams.set('rotate', rotation);
+      }
+      source3.srcset = url3.toString();
+
+      // Source 2: WebP for desktop (2000px width)
+      const source2 = document.createElement('source');
+      source2.type = 'image/webp';
+      source2.media = '(min-width: 600px)';
+      const url2 = new URL(baseUrl);
+      url2.searchParams.set('wid', '2000');
+      url2.searchParams.set('fmt', 'webp-alpha');
+      if (noCache) {
+        url2.searchParams.set('cache', 'off');
+      }
+      if (rotation) {
+        url2.searchParams.set('rotate', rotation);
+      }
+      source2.srcset = url2.toString();
+
+      // Fallback image: JPEG for mobile (750px width)
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.width = '1620';
+      img.height = '1080';
+      const imgUrl = new URL(baseUrl);
+      imgUrl.searchParams.set('wid', '750');
+      imgUrl.searchParams.set('fmt', 'jpg');
+      imgUrl.searchParams.set('qlt', '85');
+      if (noCache) {
+        imgUrl.searchParams.set('cache', 'off');
+      }
+      if (rotation) {
+        imgUrl.searchParams.set('rotate', rotation);
+      }
+      img.src = imgUrl.toString();
+      if (a.href !== a.innerText) {
+        img.setAttribute('alt', a.innerText);
+      }
+
+      pic.appendChild(source3);
+      pic.appendChild(source2);
+      pic.appendChild(img);
+      pic.appendChild(source1);
+      a.replaceWith(pic);
+    } else if (isDMOpenAPIUrl(a.href)) {
+      // Original DM Open API URL logic
       const baseUrl = new URL(a.href);
 
       // Check if URL contains 'test-page-v3-nocache' to toggle cache=off
