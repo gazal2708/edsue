@@ -170,97 +170,17 @@ export function decorateExternalImages(main) {
   main.querySelectorAll('a[href]').forEach((a) => {
     // Check if it's a Scene7 URL
     if (isScene7Url(a.href)) {
-      const baseUrl = new URL(a.href);
-
-      // Check if URL contains 'test-page-v3-nocache' to toggle cache=off
-      const noCache = window.location.href.includes('test-page-v3-nocache');
-
-      const pic = document.createElement('picture');
-
-      // Check if there's a rotation value in the next sibling div
-      let rotation = null;
-      const parentDiv = a.closest('div');
-      if (parentDiv && parentDiv.parentElement) {
-        const nextDiv = parentDiv.parentElement.nextElementSibling;
-        if (nextDiv) {
-          const rotationDiv = nextDiv.querySelector('div');
-          if (rotationDiv && rotationDiv.textContent.trim()) {
-            rotation = rotationDiv.textContent.trim();
-            // Remove the rotation div from markup
-            nextDiv.remove();
-          }
-        }
-      }
-
-      // Source 2: WebP for desktop (2000px width)
-      const source2 = document.createElement('source');
-      source2.type = 'image/webp';
-      source2.media = '(min-width: 600px)';
-      const url2 = new URL(baseUrl);
-      url2.searchParams.set('wid', '2000');
-      url2.searchParams.set('fmt', 'webp-alpha');
-      if (noCache) {
-        url2.searchParams.set('cache', 'off');
-      }
-      if (rotation) {
-        url2.searchParams.set('rotate', rotation);
-      }
-      source2.srcset = url2.toString();
-
-      // Source 3: JPEG for desktop (2000px width)
-      const source3 = document.createElement('source');
-      source3.type = 'image/jpeg';
-      source3.media = '(min-width: 600px)';
-      const url3 = new URL(baseUrl);
-      url3.searchParams.set('wid', '2000');
-      url3.searchParams.set('fmt', 'jpg');
-      url3.searchParams.set('qlt', '85');
-      if (noCache) {
-        url3.searchParams.set('cache', 'off');
-      }
-      if (rotation) {
-        url3.searchParams.set('rotate', rotation);
-      }
-      source3.srcset = url3.toString();
-
-      // Source 1: WebP for mobile (750px width)
-      const source1 = document.createElement('source');
-      source1.type = 'image/webp';
-      const url1 = new URL(baseUrl);
-      url1.searchParams.set('wid', '750');
-      url1.searchParams.set('fmt', 'webp-alpha');
-      if (noCache) {
-        url1.searchParams.set('cache', 'off');
-      }
-      if (rotation) {
-        url1.searchParams.set('rotate', rotation);
-      }
-      source1.srcset = url1.toString();
-
-      // Fallback image: JPEG for mobile (750px width)
+      // Simply convert anchor to img tag, preserving the Scene7 URL
       const img = document.createElement('img');
       img.loading = 'lazy';
-      const imgUrl = new URL(baseUrl);
-      imgUrl.searchParams.set('wid', '750');
-      imgUrl.searchParams.set('fmt', 'jpg');
-      imgUrl.searchParams.set('qlt', '85');
-      if (noCache) {
-        imgUrl.searchParams.set('cache', 'off');
-      }
-      if (rotation) {
-        imgUrl.searchParams.set('rotate', rotation);
-      }
-      img.src = imgUrl.toString();
+      img.src = a.href;
+      
+      // Set alt text from anchor text
       if (a.href !== a.innerText) {
         img.setAttribute('alt', a.innerText);
       }
-
-      // Append in correct order: desktop sources, mobile source, then img fallback
-      pic.appendChild(source2);
-      pic.appendChild(source3);
-      pic.appendChild(source1);
-      pic.appendChild(img);
-      a.replaceWith(pic);
+      
+      a.replaceWith(img);
     } else if (isDMOpenAPIUrl(a.href)) {
       // Original DM Open API URL logic
       const baseUrl = new URL(a.href);
